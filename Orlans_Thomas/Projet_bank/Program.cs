@@ -5,45 +5,34 @@
     public DateTime BirthDate { get; set; }
 }
 
-public class CurrentAccount
+public class CurrentAccount : Account
 {
-    public string Number { get; set; }
-    public double Balance { get; private set; }
     public double CreditLine { get; set; }
-    public Person Owner { get; set; }
 
-    public void Withdraw(double amount)
+    public override void Withdraw(double amount)
     {
-        if (amount > 0 && Balance - amount >= -CreditLine)
-        {
-            Balance -= amount;
-        }
-    }
-
-    public void Deposit(double amount)
-    {
-        if (amount > 0)
-        {
-            Balance += amount;
-        }
+        base.Withdraw(amount, CreditLine);
     }
 }
 
 public class Bank
 {
-    public Dictionary<string, CurrentAccount> Accounts { get; }
-        = new Dictionary<string, CurrentAccount>();
-    public string Name { get; set;}
+    public Dictionary<string, Account> Accounts { get; }
+        = new Dictionary<string, Account>();
 
-    public void AddAccount(CurrentAccount account)
+    public string Name { get; set; }
+
+    public void AddAccount(Account account)
     {
         Accounts.Add(account.Number, account);
     }
+
     public void DeleteAccount(string number)
     {
         Accounts.Remove(number);
     }
-     public double AccountBalance(string number)
+
+    public double AccountBalance(string number)
     {
         return Accounts[number].Balance;
     }
@@ -52,7 +41,7 @@ public class Bank
     {
         double total = 0;
 
-        foreach (CurrentAccount account in Accounts.Values)
+        foreach (Account account in Accounts.Values)
         {
             if (account.Owner == owner)
             {
@@ -64,27 +53,16 @@ public class Bank
     }
 }
 
-public class SavingsAccount
+public class SavingsAccount : Account
 {
-    public string Number { get; set; }
-    public double Balance { get; private set; }
     public DateTime DateLastWithdraw { get; set; }
-    public Person Owner { get; set; }
 
-    public void Withdraw(double amount)
+    public override void Withdraw(double amount)
     {
         if (amount > 0 && amount <= Balance)
         {
-            Balance -= amount;
+            base.Withdraw(amount);
             DateLastWithdraw = DateTime.Now;
-        }
-    }
-
-    public void Deposit(double amount)
-    {
-        if (amount > 0)
-        {
-            Balance += amount;
         }
     }
 }
