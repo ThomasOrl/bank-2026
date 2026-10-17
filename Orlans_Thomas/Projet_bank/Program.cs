@@ -43,5 +43,24 @@ public class Bank
     {
         Accounts.Remove(number);
     }
+     public double AccountBalance(string number)
+    {
+        return Accounts[number].Balance;
+    }
+
+    public double AccountTotalBalance(Person owner)
+    {
+        double total = 0;
+
+        foreach (CurrentAccount account in Accounts.Values)
+        {
+            if (account.Owner == owner)
+            {
+                total += account.Balance;
+            }
+        }
+
+        return total;
+    }
 }
 
