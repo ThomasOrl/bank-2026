@@ -64,3 +64,55 @@ public class Bank
     }
 }
 
+public class SavingsAccount
+{
+    public string Number { get; set; }
+    public double Balance { get; private set; }
+    public DateTime DateLastWithdraw { get; set; }
+    public Person Owner { get; set; }
+
+    public void Withdraw(double amount)
+    {
+        if (amount > 0 && amount <= Balance)
+        {
+            Balance -= amount;
+            DateLastWithdraw = DateTime.Now;
+        }
+    }
+
+    public void Deposit(double amount)
+    {
+        if (amount > 0)
+        {
+            Balance += amount;
+        }
+    }
+}
+
+public class Account
+{
+    public string Number { get; set; }
+    public double Balance { get; private set; }
+    public Person Owner { get; set; }
+
+    public void Deposit(double amount)
+    {
+        if (amount > 0)
+        {
+            Balance += amount;
+        }
+    }
+
+    public virtual void Withdraw(double amount)
+    {
+        Withdraw(amount, 0);
+    }
+
+    protected void Withdraw(double amount, double creditLine)
+    {
+        if (amount > 0 && Balance - amount >= -creditLine)
+        {
+            Balance -= amount;
+        }
+    }
+}
