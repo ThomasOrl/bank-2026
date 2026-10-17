@@ -1,4 +1,26 @@
-﻿public class Person
+﻿/*
+    Test du Program
+*/
+CurrentAccount courant = new CurrentAccount();
+courant.Number = "Compte001";
+courant.Deposit(1000);
+
+SavingsAccount epargne = new SavingsAccount();
+epargne.Number = "Compte002";
+epargne.Deposit(1000);
+
+courant.ApplyInterest();
+epargne.ApplyInterest();
+
+Console.WriteLine(courant.Balance); // Normalement 1030 en result
+Console.WriteLine(epargne.Balance); 
+
+
+
+/* 
+    Program
+*/
+public class Person
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -12,6 +34,18 @@ public class CurrentAccount : Account
     public override void Withdraw(double amount)
     {
         base.Withdraw(amount, CreditLine);
+    }
+
+    protected override double CalculInterets()
+    {
+        if (Balance > 0)
+        {
+            return Balance * 0.03;
+        }
+        else
+        {
+            return Balance * 0.0975;
+        }
     }
 }
 
@@ -65,9 +99,14 @@ public class SavingsAccount : Account
             DateLastWithdraw = DateTime.Now;
         }
     }
+
+    protected override double CalculInterets()
+    {
+        return Balance * 0.045;
+    }
 }
 
-public class Account
+public abstract class Account
 {
     public string Number { get; set; }
     public double Balance { get; private set; }
@@ -92,5 +131,10 @@ public class Account
         {
             Balance -= amount;
         }
+    }
+    protected abstract double CalculInterets();
+    public void ApplyInterest()
+    {
+        Balance += CalculInterets();
     }
 }
