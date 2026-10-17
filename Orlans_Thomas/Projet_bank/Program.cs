@@ -14,11 +14,34 @@ public class CurrentAccount
 
     public void Withdraw(double amount)
     {
-        
+        if (amount > 0 && Balance - amount >= -CreditLine)
+        {
+            Balance -= amount;
+        }
     }
 
     public void Deposit(double amount)
     {
-        
+        if (amount > 0)
+        {
+            Balance += amount;
+        }
     }
 }
+
+public class Bank
+{
+    public Dictionary<string, CurrentAccount> Accounts { get; }
+        = new Dictionary<string, CurrentAccount>();
+    public string Name { get; set;}
+
+    public void AddAccount(CurrentAccount account)
+    {
+        Accounts.Add(account.Number, account);
+    }
+    public void DeleteAccount(string number)
+    {
+        Accounts.Remove(number);
+    }
+}
+
